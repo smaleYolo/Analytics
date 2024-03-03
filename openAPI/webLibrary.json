@@ -1,0 +1,547 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "RESTfull API Library",
+    "description": "RESTfull API for Web-Library DB ",
+    "version": "1.0.1"
+  },
+  "servers": [
+    {
+      "url": "https://api.library.io/"
+    }
+  ],
+  "tags": [
+    {
+      "name": "book",
+      "description": "Everything about book"
+    },
+    {
+      "name": "author",
+      "description": "Everything about author"
+    }
+  ],
+  "paths": {
+    "/books": {
+      "post": {
+        "tags": [
+          "book"
+        ],
+        "summary": "Adding new book",
+        "description": "Adding new book to a library",
+        "operationId": "addBook",
+        "requestBody": {
+          "description": "Adding new book to a library",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Book"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Book"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID book"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        },
+        "security": [
+          {
+            "jwtAuth": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "book"
+        ],
+        "summary": "Get all the books",
+        "description": "Getting all the books",
+        "operationId": "getBooks",
+        "parameters": [
+          {
+            "name": "genre",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum number of books to return",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "Offset the list of returned books",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Book"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID book"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        },
+        "security": [
+          {
+            "jwtAuth": []
+          }
+        ]
+      }
+    },
+    "/books/{bookId}": {
+      "get": {
+        "tags": [
+          "book"
+        ],
+        "summary": "Get a book by its ID",
+        "description": "Get a book by its ID",
+        "operationId": "getBookById",
+        "parameters": [
+          {
+            "name": "bookId",
+            "in": "path",
+            "description": "ID of book to return",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Book"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID book"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        },
+        "security": [
+          {
+            "jwtAuth": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "book"
+        ],
+        "summary": "Update a book",
+        "description": "Update a book by Id",
+        "operationId": "updateBookById",
+        "parameters": [
+          {
+            "name": "bookId",
+            "in": "path",
+            "description": "ID of the book to update",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Book object that needs to be updated in the library",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Book"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Book successfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Book"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Book not found"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        },
+        "security": [
+          {
+            "jwtAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "book"
+        ],
+        "summary": "Delete Book",
+        "description": "Delete book by Id",
+        "operationId": "deleteBookById",
+        "parameters": [
+          {
+            "name": "bookId",
+            "in": "path",
+            "description": "ID of book to delete",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Book successfully deleted"
+          },
+          "400": {
+            "description": "Invalid book"
+          },
+          "404": {
+            "description": "book not found"
+          }
+        },
+        "security": [
+          {
+            "jwtAuth": []
+          }
+        ]
+      }
+    },
+    "/authors": {
+      "post": {
+        "tags": [
+          "author"
+        ],
+        "summary": "Add a new author",
+        "description": "Adds a new author to the library",
+        "operationId": "addAuthor",
+        "requestBody": {
+          "description": "Author object that needs to be added to the library",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Author"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Author created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Author"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        },
+        "security": [
+          {
+            "jwtAuth": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "author"
+        ],
+        "summary": "Get all authors",
+        "description": "Returns a list of all authors in the library",
+        "operationId": "getAuthors",
+        "responses": {
+          "200": {
+            "description": "A list of authors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Author"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        },
+        "security": [
+          {
+            "jwtAuth": []
+          }
+        ]
+      }
+    },
+    "/authors/{authorId}": {
+      "get": {
+        "tags": [
+          "author"
+        ],
+        "summary": "Get author by ID",
+        "description": "Returns a single author by their ID",
+        "operationId": "getAuthorById",
+        "parameters": [
+          {
+            "name": "authorId",
+            "in": "path",
+            "description": "ID of the author to return",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Author"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Author not found"
+          }
+        },
+        "security": [
+          {
+            "jwtAuth": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "author"
+        ],
+        "summary": "Update an existing author",
+        "description": "Updates an author identified by their ID",
+        "operationId": "updateAuthorById",
+        "parameters": [
+          {
+            "name": "authorId",
+            "in": "path",
+            "description": "ID of the author to update",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Author object that needs to be updated",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Author"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Author updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Author"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Author not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        },
+        "security": [
+          {
+            "jwtAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "author"
+        ],
+        "summary": "Delete an author",
+        "description": "Deletes an author by their ID",
+        "operationId": "deleteAuthorById",
+        "parameters": [
+          {
+            "name": "authorId",
+            "in": "path",
+            "description": "ID of the author to delete",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Author deleted"
+          },
+          "404": {
+            "description": "Author not found"
+          }
+        },
+        "security": [
+          {
+            "jwtAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Book": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 10
+          },
+          "name": {
+            "type": "string",
+            "example": "The Great Gatsby"
+          },
+          "genre": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "Novel",
+              "Drama"
+            ]
+          },
+          "publishYear": {
+            "type": "integer",
+            "example": 1994
+          },
+          "authorId": {
+            "type": "integer",
+            "example": 13
+          }
+        }
+      },
+      "Author": {
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 10
+          },
+          "name": {
+            "type": "string",
+            "example": "Paul"
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Octopus"
+          },
+          "birthDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "booksCount": {
+            "type": "integer",
+            "description": "Total number of books written by the author",
+            "example": 5
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "jwtAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
